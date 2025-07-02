@@ -1,45 +1,102 @@
 from instagrapi import Client
 import time
+import random
 from keep_alive import keep_alive
 
-# 🟢 Start KeepAlive server for Replit 24/7
 keep_alive()
 
-# 🔐 Login with Session ID (replace this)
 cl = Client()
-cl.login_by_sessionid("75538953450%3A5Si93RWP2kKd9A%3A22%3AAYcl9Rn6O_jHhyGFlRdyLJWLOIb29iPUDDnBcyHdRA")
+cl.login_by_sessionid("75538953450%3AfGtfQeuqQVMp9j%3A5%3AAYcwo8yG2cB2tx5JcvYBBDvrbpK0wepvefFiEyhbwA")  # 🔐 Apna session ID daalo
 
-# 🤖 Bot Info
 me_id = cl.user_id
-print(f"🤖 Bot running as: {cl.username} (User ID: {me_id})")
+my_username = cl.username
+print(f"🤖 Logged in as @{my_username} (ID: {me_id})")
 
-# ✅ To avoid replying again to the same message
-replied_msg_ids = set()
+# ✅ Message reply templates (edit if you want)
+reply_templates_master = [
+    """𝗡𝗜𝗖𝗞 𝗧𝗘𝗥𝗜 𝟭𝟱 𝗦𝗔𝗔𝗟 𝗞𝗜 𝗕𝗛𝗘𝗡 𝗞𝗢 𝗥𝗢𝗭 𝗠𝗘 𝗢𝗬𝗢 𝗠𝗘 𝗟𝗘𝗝𝗔𝗞𝗔𝗥 𝟰 𝗚𝗛𝗔𝗡𝗧𝗘 𝗖𝗛#𝗢𝗗𝗧𝗔 𝗛𝗨 ____________________________________________________/
+𝗡𝗜𝗖𝗞 𝗞𝗜 𝗕𝗛𝗘𝗡 𝗢𝗬𝗢 𝗠𝗘 𝗥𝗢𝗭 𝗠𝗔𝗥𝗪𝗔𝗧𝗜___________________________________________/
+
+𝗡𝗜𝗖𝗞 𝗧𝗘𝗥𝗜 𝟭𝟱 𝗦𝗔𝗔𝗟 𝗞𝗜 𝗕𝗛𝗘𝗡 𝗞𝗢 𝗥𝗢𝗭 𝗠𝗘 𝗢𝗬𝗢 𝗠𝗘 𝗟𝗘𝗝𝗔𝗞𝗔𝗥 𝟰 𝗚𝗛𝗔𝗡𝗧𝗘 𝗖𝗛#𝗢𝗗𝗧𝗔 𝗛𝗨 ____________________________________________________/
+𝗡𝗜𝗖𝗞 𝗞𝗜 𝗕𝗛𝗘𝗡 𝗢𝗬𝗢 𝗠𝗘 𝗥𝗢𝗭 𝗠𝗔𝗥𝗪𝗔𝗧𝗜___________________________________________/
+
+𝗡𝗜𝗖𝗞 𝗧𝗘𝗥𝗜 𝟭𝟱 𝗦𝗔𝗔𝗟 𝗞𝗜 𝗕𝗛𝗘𝗡 𝗞𝗢 𝗥𝗢𝗭 𝗠𝗘 𝗢𝗬𝗢 𝗠𝗘 𝗟𝗘𝗝𝗔𝗞𝗔𝗥 𝟰 𝗚𝗛𝗔𝗡𝗧𝗘 𝗖𝗛#𝗢𝗗𝗧𝗔 𝗛𝗨 ____________________________________________________/
+𝗡𝗜𝗖𝗞 𝗞𝗜 𝗕𝗛𝗘𝗡 𝗢𝗬𝗢 𝗠𝗘 𝗥𝗢𝗭 𝗠𝗔𝗥𝗪𝗔𝗧𝗜___________________________________________/""",
+    """ℕ𝕀ℂ𝕂➪𝕂𝕀 𝕄𝕌𝕄𝕄𝕐 𝕂𝕆 ℝ𝕆ℤ 𝕃𝕌ℕ𝔻 ℂℍ𝕌𝕊𝕋𝕀 ℍ 𝕄𝔸𝕁𝔼 𝕊𝔼 _________________________✓
+ℕ𝕚ℂ𝕂 𝕂𝕀 𝔹ℍ𝔼ℕ 𝕂𝕀 ℂℍ𝕌𝕋 𝔹𝔸ℍ𝕌𝕋 𝕄𝔸𝕊𝕋 ℍ𝔸𝕀_______________________________________________________________✓
+ℕ𝕀ℂ𝕂➪𝕂𝕀 𝕄𝕌𝕄𝕄𝕐 𝕂𝕆 ℝ𝕆ℤ 𝕃𝕌ℕ𝔻 ℂℍ𝕌𝕊𝕋𝕀 ℍ 𝕄𝔸𝕁𝔼 𝕊𝔼 _________________________✓
+ℕ𝕚ℂ𝕂 𝕂𝕀 𝔹ℍ𝔼ℕ 𝕂𝕀 ℂℍ𝕌𝕋 𝔹𝔸ℍ𝕌𝕋 𝕄𝔸𝕊𝕋 ℍ𝔸𝕀_______________________________________________________________✓
+ℕ𝕀ℂ𝕂➪𝕂𝕀 𝕄𝕌𝕄𝕄𝕐 𝕂𝕆 ℝ𝕆ℤ 𝕃𝕌ℕ𝔻 ℂℍ𝕌𝕊𝕋𝕀 ℍ 𝕄𝔸𝕁𝔼 𝕊𝔼 _________________________✓
+ℕ𝕚ℂ𝕂 𝕂𝕀 𝔹ℍ𝔼ℕ 𝕂𝕀 ℂℍ𝕌𝕋 𝔹𝔸ℍ𝕌𝕋 𝕄𝔸𝕊𝕋 ℍ𝔸𝕀_______________________________________________________________✓
+ℕ𝕀ℂ𝕂➪𝕂𝕀 𝕄𝕌𝕄𝕄𝕐 𝕂𝕆 ℝ𝕆ℤ 𝕃𝕌ℕ𝔻 ℂℍ𝕌𝕊𝕋𝕀 ℍ 𝕄𝔸𝕁𝔼 𝕊𝔼 _________________________✓
+ℕ𝕚ℂ𝕂 𝕂𝕀 𝔹ℍ𝔼ℕ 𝕂𝕀 ℂℍ𝕌𝕋 𝔹𝔸ℍ𝕌𝕋 𝕄𝔸𝕊𝕋 ℍ𝔸𝕀_______________________________________________________________✓
+ℕ𝕀ℂ𝕂➪𝕂𝕀 𝕄𝕌𝕄𝕄𝕐 𝕂𝕆 ℝ𝕆ℤ 𝕃𝕌ℕ𝔻 ℂℍ𝕌𝕊𝕋𝕀 ℍ 𝕄𝔸𝕁𝔼 𝕊𝔼 _________________________✓""",
+"""𝐍𝐈𝐂𝐊 𝐊𝐈 𝐌𝐔𝐌𝐌𝐘 𝐊𝐈 𝐁𝐇𝐎𝐒𝐃𝐈 𝐁𝐀𝐇𝐔𝐓 𝐁𝐀𝐃𝐁𝐔 𝐌𝐀𝐑𝐓𝐈 𝐇__________________________________________________/
+𝐍𝐈𝐂𝐊 𝐊𝐈 𝐊𝐔𝐖𝐀𝐑𝐈 𝐁𝐇𝐄𝐍 𝐊𝐀 𝐀𝐒𝐒 𝐇𝐎𝐋𝐄 𝐁𝐀𝐇𝐔𝐓 𝐓𝐈𝐆𝐇𝐓 𝐇_________________________________________________/
+𝐍𝐈𝐂𝐊 𝐊𝐈 𝐌𝐔𝐌𝐌𝐘 𝐊𝐈 𝐁𝐇𝐎𝐒𝐃𝐈 𝐁𝐀𝐇𝐔𝐓 𝐁𝐀𝐃𝐁𝐔 𝐌𝐀𝐑𝐓𝐈 𝐇__________________________________________________/
+𝐍𝐈𝐂𝐊 𝐊𝐈 𝐊𝐔𝐖𝐀𝐑𝐈 𝐁𝐇𝐄𝐍 𝐊𝐀 𝐀𝐒𝐒 𝐇𝐎𝐋𝐄 𝐁𝐀𝐇𝐔𝐓 𝐓𝐈𝐆𝐇𝐓 𝐇_________________________________________________/
+𝐍𝐈𝐂𝐊 𝐊𝐈 𝐌𝐔𝐌𝐌𝐘 𝐊𝐈 𝐁𝐇𝐎𝐒𝐃𝐈 𝐁𝐀𝐇𝐔𝐓 𝐁𝐀𝐃𝐁𝐔 𝐌𝐀𝐑𝐓𝐈 𝐇__________________________________________________/
+𝐍𝐈𝐂𝐊 𝐊𝐈 𝐊𝐔𝐖𝐀𝐑𝐈 𝐁𝐇𝐄𝐍 𝐊𝐀 𝐀𝐒𝐒 𝐇𝐎𝐋𝐄 𝐁𝐀𝐇𝐔𝐓 𝐓𝐈𝐆𝐇𝐓 𝐇_________________________________________________/
+𝐍𝐈𝐂𝐊 𝐊𝐈 𝐌𝐔𝐌𝐌𝐘 𝐊𝐈 𝐁𝐇𝐎𝐒𝐃𝐈 𝐁𝐀𝐇𝐔𝐓 𝐁𝐀𝐃𝐁𝐔 𝐌𝐀𝐑𝐓𝐈 𝐇__________________________________________________/"""
+]
+
+# 🧠 Maintain last message replied for each user
+last_msg_id_by_user = {}
+
+def get_next_reply(username, history):
+    # Filter replies jo already iss user ko bheje gaye ho
+    possible_replies = [r for r in reply_templates_master if r not in history]
+    if not possible_replies:
+        history.clear()
+        possible_replies = reply_templates_master.copy()
+    reply = random.choice(possible_replies)
+    history.add(reply)
+    return reply.replace("{user}", username)
+
+user_reply_history = {}
 
 def auto_reply():
     while True:
-        threads = cl.direct_threads(amount=1)
+        try:
+            threads = cl.direct_threads(amount=10)
 
-        for thread in threads:
-            if not thread.messages:
-                continue
+            for thread in threads:
+                if not thread.messages:
+                    continue
 
-            for msg in thread.messages[:1]:  # Last 5 msgs check kare
-                if msg.id in replied_msg_ids:
-                    continue  # Already replied
+                latest_msg = thread.messages[0]
 
-                if msg.user_id == me_id:
-                    continue  # Apne msg skip
+                # Apna msg ignore karo
+                if latest_msg.user_id == me_id:
+                    continue
+
+                user_id = latest_msg.user_id
+                username = cl.user_info(user_id).username
+
+                # Agar same msg pe already reply kar chuke ho, skip karo
+                if last_msg_id_by_user.get(user_id) == latest_msg.id:
+                    continue
+
+                # User history init if not exists
+                if user_id not in user_reply_history:
+                    user_reply_history[user_id] = set()
+
+                # 📨 Generate new random reply
+                reply = get_next_reply(username, user_reply_history[user_id])
 
                 try:
-                    # ✉️ Reply to the same thread (GC or DM)
-                    cl.direct_answer(thread.id, "𝗧𝗘𝗥𝗜 𝗠𝗔 𝗞𝗜 𝗖𝗛#𝗧 𝗙𝗔𝗗 𝗗𝗨 𝗧𝗘𝗔𝗠 𝗗𝗘𝗩𝗜𝗟😂")
-                    print(f"✔️ Replied to user {msg.user_id} in thread {thread.id}")
-                    replied_msg_ids.add(msg.id)
-
+                    cl.direct_answer(thread.id, reply)
+                    print(f"✔️ Replied to @{username}: {reply}")
+                    last_msg_id_by_user[user_id] = latest_msg.id
+                    time.sleep(random.randint(8, 14))
                 except Exception as e:
-                    print(f"⚠️ Error replying to thread {thread.id}: {e}")
+                    print(f"⚠️ Failed to reply in thread {thread.id}: {e}")
 
-        time.sleep(20)
+            time.sleep(random.randint(10, 30))
 
+        except Exception as err:
+            print(f"🚨 Main loop error: {err}")
+            time.sleep(random.randint(10, 30))
+
+# 🚀 Start bot
 auto_reply()
