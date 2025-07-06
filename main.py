@@ -1,102 +1,51 @@
 from instagrapi import Client
 import time
 import random
-from keep_alive import keep_alive
 
-keep_alive()
-
+# Login to Instagram
 cl = Client()
-cl.login_by_sessionid("75538953450%3AfGtfQeuqQVMp9j%3A5%3AAYcwo8yG2cB2tx5JcvYBBDvrbpK0wepvefFiEyhbwA")  # 🔐 Apna session ID daalo
+cl.login_by_sessionid("70016257168%3AM6nSnozvM5Bg2H%3A29%3AAYe0gCJZkBuwV_gmYH-5eX8gft7dmvg-5BWGrySBfg")  # 🔐 Replace this with your session ID
 
-me_id = cl.user_id
-my_username = cl.username
-print(f"🤖 Logged in as @{my_username} (ID: {me_id})")
-
-# ✅ Message reply templates (edit if you want)
-reply_templates_master = [
-    """𝗡𝗜𝗖𝗞 𝗧𝗘𝗥𝗜 𝟭𝟱 𝗦𝗔𝗔𝗟 𝗞𝗜 𝗕𝗛𝗘𝗡 𝗞𝗢 𝗥𝗢𝗭 𝗠𝗘 𝗢𝗬𝗢 𝗠𝗘 𝗟𝗘𝗝𝗔𝗞𝗔𝗥 𝟰 𝗚𝗛𝗔𝗡𝗧𝗘 𝗖𝗛#𝗢𝗗𝗧𝗔 𝗛𝗨 ____________________________________________________/
-𝗡𝗜𝗖𝗞 𝗞𝗜 𝗕𝗛𝗘𝗡 𝗢𝗬𝗢 𝗠𝗘 𝗥𝗢𝗭 𝗠𝗔𝗥𝗪𝗔𝗧𝗜___________________________________________/
-
-𝗡𝗜𝗖𝗞 𝗧𝗘𝗥𝗜 𝟭𝟱 𝗦𝗔𝗔𝗟 𝗞𝗜 𝗕𝗛𝗘𝗡 𝗞𝗢 𝗥𝗢𝗭 𝗠𝗘 𝗢𝗬𝗢 𝗠𝗘 𝗟𝗘𝗝𝗔𝗞𝗔𝗥 𝟰 𝗚𝗛𝗔𝗡𝗧𝗘 𝗖𝗛#𝗢𝗗𝗧𝗔 𝗛𝗨 ____________________________________________________/
-𝗡𝗜𝗖𝗞 𝗞𝗜 𝗕𝗛𝗘𝗡 𝗢𝗬𝗢 𝗠𝗘 𝗥𝗢𝗭 𝗠𝗔𝗥𝗪𝗔𝗧𝗜___________________________________________/
-
-𝗡𝗜𝗖𝗞 𝗧𝗘𝗥𝗜 𝟭𝟱 𝗦𝗔𝗔𝗟 𝗞𝗜 𝗕𝗛𝗘𝗡 𝗞𝗢 𝗥𝗢𝗭 𝗠𝗘 𝗢𝗬𝗢 𝗠𝗘 𝗟𝗘𝗝𝗔𝗞𝗔𝗥 𝟰 𝗚𝗛𝗔𝗡𝗧𝗘 𝗖𝗛#𝗢𝗗𝗧𝗔 𝗛𝗨 ____________________________________________________/
-𝗡𝗜𝗖𝗞 𝗞𝗜 𝗕𝗛𝗘𝗡 𝗢𝗬𝗢 𝗠𝗘 𝗥𝗢𝗭 𝗠𝗔𝗥𝗪𝗔𝗧𝗜___________________________________________/""",
-    """ℕ𝕀ℂ𝕂➪𝕂𝕀 𝕄𝕌𝕄𝕄𝕐 𝕂𝕆 ℝ𝕆ℤ 𝕃𝕌ℕ𝔻 ℂℍ𝕌𝕊𝕋𝕀 ℍ 𝕄𝔸𝕁𝔼 𝕊𝔼 _________________________✓
-ℕ𝕚ℂ𝕂 𝕂𝕀 𝔹ℍ𝔼ℕ 𝕂𝕀 ℂℍ𝕌𝕋 𝔹𝔸ℍ𝕌𝕋 𝕄𝔸𝕊𝕋 ℍ𝔸𝕀_______________________________________________________________✓
-ℕ𝕀ℂ𝕂➪𝕂𝕀 𝕄𝕌𝕄𝕄𝕐 𝕂𝕆 ℝ𝕆ℤ 𝕃𝕌ℕ𝔻 ℂℍ𝕌𝕊𝕋𝕀 ℍ 𝕄𝔸𝕁𝔼 𝕊𝔼 _________________________✓
-ℕ𝕚ℂ𝕂 𝕂𝕀 𝔹ℍ𝔼ℕ 𝕂𝕀 ℂℍ𝕌𝕋 𝔹𝔸ℍ𝕌𝕋 𝕄𝔸𝕊𝕋 ℍ𝔸𝕀_______________________________________________________________✓
-ℕ𝕀ℂ𝕂➪𝕂𝕀 𝕄𝕌𝕄𝕄𝕐 𝕂𝕆 ℝ𝕆ℤ 𝕃𝕌ℕ𝔻 ℂℍ𝕌𝕊𝕋𝕀 ℍ 𝕄𝔸𝕁𝔼 𝕊𝔼 _________________________✓
-ℕ𝕚ℂ𝕂 𝕂𝕀 𝔹ℍ𝔼ℕ 𝕂𝕀 ℂℍ𝕌𝕋 𝔹𝔸ℍ𝕌𝕋 𝕄𝔸𝕊𝕋 ℍ𝔸𝕀_______________________________________________________________✓
-ℕ𝕀ℂ𝕂➪𝕂𝕀 𝕄𝕌𝕄𝕄𝕐 𝕂𝕆 ℝ𝕆ℤ 𝕃𝕌ℕ𝔻 ℂℍ𝕌𝕊𝕋𝕀 ℍ 𝕄𝔸𝕁𝔼 𝕊𝔼 _________________________✓
-ℕ𝕚ℂ𝕂 𝕂𝕀 𝔹ℍ𝔼ℕ 𝕂𝕀 ℂℍ𝕌𝕋 𝔹𝔸ℍ𝕌𝕋 𝕄𝔸𝕊𝕋 ℍ𝔸𝕀_______________________________________________________________✓
-ℕ𝕀ℂ𝕂➪𝕂𝕀 𝕄𝕌𝕄𝕄𝕐 𝕂𝕆 ℝ𝕆ℤ 𝕃𝕌ℕ𝔻 ℂℍ𝕌𝕊𝕋𝕀 ℍ 𝕄𝔸𝕁𝔼 𝕊𝔼 _________________________✓""",
-"""𝐍𝐈𝐂𝐊 𝐊𝐈 𝐌𝐔𝐌𝐌𝐘 𝐊𝐈 𝐁𝐇𝐎𝐒𝐃𝐈 𝐁𝐀𝐇𝐔𝐓 𝐁𝐀𝐃𝐁𝐔 𝐌𝐀𝐑𝐓𝐈 𝐇__________________________________________________/
-𝐍𝐈𝐂𝐊 𝐊𝐈 𝐊𝐔𝐖𝐀𝐑𝐈 𝐁𝐇𝐄𝐍 𝐊𝐀 𝐀𝐒𝐒 𝐇𝐎𝐋𝐄 𝐁𝐀𝐇𝐔𝐓 𝐓𝐈𝐆𝐇𝐓 𝐇_________________________________________________/
-𝐍𝐈𝐂𝐊 𝐊𝐈 𝐌𝐔𝐌𝐌𝐘 𝐊𝐈 𝐁𝐇𝐎𝐒𝐃𝐈 𝐁𝐀𝐇𝐔𝐓 𝐁𝐀𝐃𝐁𝐔 𝐌𝐀𝐑𝐓𝐈 𝐇__________________________________________________/
-𝐍𝐈𝐂𝐊 𝐊𝐈 𝐊𝐔𝐖𝐀𝐑𝐈 𝐁𝐇𝐄𝐍 𝐊𝐀 𝐀𝐒𝐒 𝐇𝐎𝐋𝐄 𝐁𝐀𝐇𝐔𝐓 𝐓𝐈𝐆𝐇𝐓 𝐇_________________________________________________/
-𝐍𝐈𝐂𝐊 𝐊𝐈 𝐌𝐔𝐌𝐌𝐘 𝐊𝐈 𝐁𝐇𝐎𝐒𝐃𝐈 𝐁𝐀𝐇𝐔𝐓 𝐁𝐀𝐃𝐁𝐔 𝐌𝐀𝐑𝐓𝐈 𝐇__________________________________________________/
-𝐍𝐈𝐂𝐊 𝐊𝐈 𝐊𝐔𝐖𝐀𝐑𝐈 𝐁𝐇𝐄𝐍 𝐊𝐀 𝐀𝐒𝐒 𝐇𝐎𝐋𝐄 𝐁𝐀𝐇𝐔𝐓 𝐓𝐈𝐆𝐇𝐓 𝐇_________________________________________________/
-𝐍𝐈𝐂𝐊 𝐊𝐈 𝐌𝐔𝐌𝐌𝐘 𝐊𝐈 𝐁𝐇𝐎𝐒𝐃𝐈 𝐁𝐀𝐇𝐔𝐓 𝐁𝐀𝐃𝐁𝐔 𝐌𝐀𝐑𝐓𝐈 𝐇__________________________________________________/"""
+# List of GC names to rotate
+group_names = [
+    "𝐍𝐈𝐂𝐊 𝐓𝐄𝐑𝐈 𝐌𝐀 𝐊𝐈 𝐂𝐇𝐔𝐓❤︎",
+    "𝐍𝐈𝐂𝐊 𝐓𝐄𝐑𝐈 𝐌𝐀 𝐊𝐈 𝐂𝐇𝐔𝐓✿︎",
+    "𝐍𝐈𝐂𝐊 𝐓𝐄𝐑𝐈 𝐌𝐀 𝐊𝐈 𝐂𝐇𝐔𝐓🝮︎︎︎︎︎︎︎",
+    "𝐍𝐈𝐂𝐊 𝐓𝐄𝐑𝐈 𝐌𝐀 𝐊𝐈 𝐂𝐇𝐔𝐓㋛︎",
+    "𝐍𝐈𝐂𝐊 𝐓𝐄𝐑𝐈 𝐌𝐀 𝐊𝐈 𝐂𝐇𝐔𝐓❦︎",
+    "𝐍𝐈𝐂𝐊 𝐓𝐄𝐑𝐈 𝐌𝐀 𝐊𝐈 𝐂𝐇𝐔𝐓𓆉︎",
+    "𝐍𝐈𝐂𝐊 𝐓𝐄𝐑𝐈 𝐌𝐀 𝐊𝐈 𝐂𝐇𝐔𝐓✵",
+    "𝐍𝐈𝐂𝐊 𝐓𝐄𝐑𝐈 𝐌𝐀 𝐊𝐈 𝐂𝐇𝐔𝐓𖣘",
+    "𝐍𝐈𝐂𝐊 𝐓𝐄𝐑𝐈 𝐌𝐀 𝐊𝐈 𝐂𝐇𝐔𝐓❁",
+    "𝐍𝐈𝐂𝐊 𝐓𝐄𝐑𝐈 𝐌𝐀 𝐊𝐈 𝐂𝐇𝐔𝐓𓆈"
 ]
 
-# 🧠 Maintain last message replied for each user
-last_msg_id_by_user = {}
+# Function to get top GC thread ID
+def get_gc_thread_id():
+    threads = cl.direct_threads(amount=5)
+    for thread in threads:
+        if thread.is_group:
+            return thread.id
+    return None
 
-def get_next_reply(username, history):
-    # Filter replies jo already iss user ko bheje gaye ho
-    possible_replies = [r for r in reply_templates_master if r not in history]
-    if not possible_replies:
-        history.clear()
-        possible_replies = reply_templates_master.copy()
-    reply = random.choice(possible_replies)
-    history.add(reply)
-    return reply.replace("{user}", username)
+# Auto name changer
+def start_auto_gc_rename():
+    thread_id = get_gc_thread_id()
+    if not thread_id:
+        print("❌ No group chat found.")
+        return
 
-user_reply_history = {}
+    print(f"🚀 Changing GC Name of: {thread_id}")
 
-def auto_reply():
     while True:
         try:
-            threads = cl.direct_threads(amount=10)
+            new_name = random.choice(group_names)
+            cl.direct_thread_update_title(thread_id, new_name)
+            print(f"✔️ Changed GC name to: {new_name}")
+            time.sleep(random.randint(10, 20))  # Delay between changes
+        except Exception as e:
+            print(f"⚠️ Error: {e}")
+            time.sleep(60)
 
-            for thread in threads:
-                if not thread.messages:
-                    continue
-
-                latest_msg = thread.messages[0]
-
-                # Apna msg ignore karo
-                if latest_msg.user_id == me_id:
-                    continue
-
-                user_id = latest_msg.user_id
-                username = cl.user_info(user_id).username
-
-                # Agar same msg pe already reply kar chuke ho, skip karo
-                if last_msg_id_by_user.get(user_id) == latest_msg.id:
-                    continue
-
-                # User history init if not exists
-                if user_id not in user_reply_history:
-                    user_reply_history[user_id] = set()
-
-                # 📨 Generate new random reply
-                reply = get_next_reply(username, user_reply_history[user_id])
-
-                try:
-                    cl.direct_answer(thread.id, reply)
-                    print(f"✔️ Replied to @{username}: {reply}")
-                    last_msg_id_by_user[user_id] = latest_msg.id
-                    time.sleep(random.randint(8, 14))
-                except Exception as e:
-                    print(f"⚠️ Failed to reply in thread {thread.id}: {e}")
-
-            time.sleep(random.randint(10, 30))
-
-        except Exception as err:
-            print(f"🚨 Main loop error: {err}")
-            time.sleep(random.randint(10, 30))
-
-# 🚀 Start bot
-auto_reply()
+# ▶️ Start bot
+start_auto_gc_rename()
