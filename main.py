@@ -51,7 +51,7 @@ def start_auto_gc_rename():
                 }
             )
             print(f"✔️ GC name changed to: {new_name}")
-            time.sleep(random.randint(01, 20))  # Safe delay
+            time.sleep(random.randint(10, 20))  # Safe delay
         except Exception as e:
             print(f"⚠️ Error while changing GC name: {e}")
             time.sleep(60)
