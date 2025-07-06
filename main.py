@@ -1,60 +1,55 @@
-from keep_alive import keep_alive
-keep_alive()  # ✅ Keeps the bot alive on platforms like Render or Replit
-
 from instagrapi import Client
 import time
 import random
+from keep_alive import keep_alive  # Make sure keep_alive.py exists
 
-# 🔐 Login to Instagram
+# 🔌 Start web server for port binding (Render compatible)
+keep_alive()
+
+# 🔐 Instagram login
 cl = Client()
-cl.login_by_sessionid("70016257168%3AM6nSnozvM5Bg2H%3A29%3AAYe0gCJZkBuwV_gmYH-5eX8gft7dmvg-5BWGrySBfg")  # ← Yaha apna session ID daalo
+cl.login_by_sessionid("70016257168%3AM6nSnozvM5Bg2H%3A29%3AAYe0gCJZkBuwV_gmYH-5eX8gft7dmvg-5BWGrySBfg")  # <-- Replace this with your real session ID
 
-# 🔁 List of names to rotate
+# 📛 List of group chat names to rotate
 group_names = [
-    "NICK TERI TMKC ♥️",
-    "NICK TERI TMKC 🖤",
-    "NICK TERI TMKC 🤍",
-    "NICK TERI TMKC ❤️",
-    "NICK TERI TMKC 🧡",
-    "NICK TERI TMKC 💛",
-    "NICK TERI TMKC 💚",
-    "NICK TERI TMKC 🤎",
-    "NICK TERI TMKC 💜",
-    "NICK TERI TMKC 💙"
+    "SHUBHANSH TMKC--- 💙",
+    "SHUBHANSH TMKC--- 💜",
+    "SHUBHANSH TMKC--- 🤎",
+    "SHUBHANSH TMKC--- 💚",
+    "SHUBHANSH TMKC--- 💛",
+    "SHUBHANSH TMKC--- 🧡",
+    "SHUBHANSH TMKC--- ❤️",
+    "SHUBHANSH TMKC--- 🤍",
+    "SHUBHANSH TMKC--- ♥️",
+    "SHUBHANSH TMKC--- 🖤"
 ]
 
-# 🔎 Sabse top wale GC ka thread ID lao
-def get_gc_thread_id():
+# 🔍 Get topmost group chat thread ID where you're admin
+def get_top_gc_thread_id():
     threads = cl.direct_threads(amount=10)
     for thread in threads:
-        if thread.is_group:
+        if thread.is_group and thread.is_viewer_admin:
             return thread.id
     return None
 
-# 🔄 Auto GC Name Changer
+# 🔁 Start renaming loop
 def start_auto_gc_rename():
-    thread_id = get_gc_thread_id()
+    thread_id = get_top_gc_thread_id()
     if not thread_id:
-        print("❌ Koi GC nahi mila.")
+        print("❌ No admin GC found.")
         return
 
-    print(f"🚀 Changing GC name in thread: {thread_id}")
+    print(f"🚀 Changing GC name of thread: {thread_id}")
 
     while True:
         try:
             new_name = random.choice(group_names)
-            cl.private_request(
-                "direct_v2/threads/update_title/",
-                {
-                    "thread_id": thread_id,
-                    "title": new_name
-                }
-            )
-            print(f"✔️ GC name changed to: {new_name}")
-            time.sleep(random.randint(10, 20))  # Safe delay
+            cl.direct_thread_update_title(thread_id, new_name)
+            print(f"✔️ Changed GC name to: {new_name}")
+            time.sleep(random.randint(10, 20))  # Delay between renames
         except Exception as e:
-            print(f"⚠️ Error while changing GC name: {e}")
+            print(f"⚠️ Error while changing name: {e}")
             time.sleep(60)
 
-# 🚀 Start
+# ▶️ Start bot
 start_auto_gc_rename()
